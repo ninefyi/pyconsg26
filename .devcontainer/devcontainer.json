@@ -1,0 +1,24 @@
+{
+  "name": "Pulumi & PyInfra MongoDB Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/python:3.10",
+  "features": {
+    "ghcr.io/devcontainers/features/azure-cli:1": {}
+  },
+  "containerEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.pulumi/bin"
+  },
+  "postCreateCommand": "curl -fsSL https://get.pulumi.com | sh && pip install --upgrade pip && pip install pyinfra",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vscode.azurecli",
+        "ms-azuretools.vscode-azureresourcegroups"
+      ]
+    }
+  }
+}

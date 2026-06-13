@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Orchestrating Distributed Cloud Infrastructure with Pulumi and PyInfra - PyCon SG 2026 Presentation">
+  <meta property="og:title" content="Orchestrating Distributed Infrastructure - Pulumi & PyInfra">
+  <meta property="og:description"
+    content="A Python-First Paradigm for Provisioning and Configuration. PyCon Singapore 2026 talk by Piti Champeethong.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ninefyi.github.io/pyconsg26/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Orchestrating Distributed Infrastructure - Pulumi & PyInfra">
+  <meta name="twitter:description"
+    content="A Python-First Paradigm for Provisioning and Configuration. PyCon Singapore 2026.">
+  <title>Orchestrating Distributed Infrastructure - Pulumi &amp; PyInfra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>Pulumi & PyInfra</h2>
+      <p>PyCon SG 2026</p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li class="nav-item active" data-slide-index="0">1. Title & Abstract</li>
+        <li class="nav-item" data-slide-index="1">2. Presenter Profile</li>
+        <li class="nav-item" data-slide-index="2">3. Session Roadmap</li>
+        <li class="nav-item" data-slide-index="3">4. The DevOps Paradox</li>
+        <li class="nav-item" data-slide-index="4">5. The "Language Soup"</li>
+        <li class="nav-item" data-slide-index="5">6. The IaPy Vision</li>
+        <li class="nav-item" data-slide-index="6">7. State vs. Mutation</li>
+        <li class="nav-item" data-slide-index="7">8. Introducing Pulumi</li>
+        <li class="nav-item" data-slide-index="8">9. Introducing PyInfra</li>
+        <li class="nav-item" data-slide-index="9">10. Paradigm Comparison</li>
+        <li class="nav-item" data-slide-index="10">11. Repo Structure</li>
+        <li class="nav-item" data-slide-index="11">12. Network Topology</li>
+        <li class="nav-item" data-slide-index="12">13. Metadata Handoff</li>
+        <li class="nav-item" data-slide-index="13">14. Discovery Workflow</li>
+        <li class="nav-item" data-slide-index="14">15. Code: Pulumi</li>
+        <li class="nav-item" data-slide-index="15">16. Code: Inventory</li>
+        <li class="nav-item" data-slide-index="16">17. Code: Deploy</li>
+        <li class="nav-item" data-slide-index="17">18. Deployment Pipeline</li>
+        <li class="nav-item" data-slide-index="18">19. Clustering Mechanics</li>
+        <li class="nav-item" data-slide-index="19">20. Security & Secrets</li>
+        <li class="nav-item" data-slide-index="20">21. Enterprise Practices</li>
+        <li class="nav-item" data-slide-index="21">22. Pitfalls & Resolutions</li>
+        <li class="nav-item" data-slide-index="22">23. Takeaways & Q&A</li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>Use ← / → or Space to navigate</p>
+      <span class="touch-tip">Swipe Left/Right to navigate</span>
+    </div>
+  </aside>
+
+  <!-- Main Slide Display -->
+  <main class="slides-container">
+    <div class="slide-deck">
+
+      <!-- Slide 1: Title -->
+      <div class="slide title-slide active">
+        <span class="badge">Session Talk</span>
+        <h1>Orchestrating Distributed Cloud Infrastructure with Pulumi and PyInfra</h1>
+        <p>A Python-First Paradigm for Provisioning and Configuration</p>
+        <div class="meta">
+          <strong>Presenter:</strong> Piti Champeethong<br>
+          <span>Senior Consulting Engineer at MongoDB | Microsoft MVP</span>
+        </div>
+      </div>
+
+      <!-- Slide 2: Presenter Profile -->
+      <div class="slide">
+        <h2>Presenter Profile</h2>
+        <div class="cols-2">
+          <div class="glass-card">
+            <h3>Piti Champeethong</h3>
+            <p class="card-subtitle">Senior Consulting Engineer at MongoDB | Microsoft MVP</p>
+            <p class="card-body">Over 20 years of experience in software development and database application design. Leader of the MongoDB User Group Thailand.</p>
+            <ul class="card-list">
+              <li>Expertise in MongoDB, Azure, Python, and CI/CD pipelines.</li>
+              <li>Active speaker at technology conferences and user groups.</li>
+            </ul>
+          </div>
+          <div class="glass-card accent-border">
+            <h3>Connect with Me</h3>
+            <p class="card-subtitle">Social & Professional Profiles</p>
+            <p class="card-body">Follow my developer community contributions, research codebases, and technical blog updates:</p>
+            <ul class="card-list">
+              <li>
+                <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/pitichampeethong/" target="_blank" class="accent-link">linkedin.com/in/pitichampeethong</a>
+              </li>
+              <li>
+                <strong>GitHub:</strong> <a href="https://github.com/ninefyi" target="_blank" class="accent-link">github.com/ninefyi</a>
+              </li>
+              <li>
+                <strong>MVP Profile:</strong> <a
+                  href="https://mvp.microsoft.com/en-US/MVP/profile/a711758c-c801-45cb-8cea-e405ad824ac8"
+                  target="_blank" class="accent-link">Piti Champeethong MVP Page</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Roadmap -->
+      <div class="slide">
+        <h2>Presentation Roadmap</h2>
+        <p>The structured journey through Python-native cloud automation:</p>
+        <div class="card-grid card-grid-compact">
+          <div class="glass-card">
+            <h3>Slides 4-6</h3>
+            <strong>The Paradigm Shift</strong>
+            <p class="card-detail">Understanding tool sprawl and the IaPy vision.</p>
+          </div>
+          <div class="glass-card">
+            <h3>Slides 7-10</h3>
+            <strong>Tooling Foundations</strong>
+            <p class="card-detail">Core features of Pulumi, PyInfra, and comparisons.</p>
+          </div>
+          <div class="glass-card">
+            <h3>Slides 11-14</h3>
+            <strong>Architecture & Flow</strong>
+            <p class="card-detail">Solutions layout, topology diagrams, and handoff flows.</p>
+          </div>
+          <div class="glass-card">
+            <h3>Slides 15-17</h3>
+            <strong>Code Deep Dive</strong>
+            <p class="card-detail">Live Python code for Pulumi, inventory, and deployment.</p>
+          </div>
+          <div class="glass-card">
+            <h3>Slides 18-20</h3>
+            <strong>Clustering & Security</strong>
+            <p class="card-detail">Deploying MongoDB, sync rules, and secrets handling.</p>
+          </div>
+          <div class="glass-card">
+            <h3>Slides 21-23</h3>
+            <strong>Production Patterns</strong>
+            <p class="card-detail">CI/CD workflows, common traps, and resources.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: The DevOps Paradox -->
+      <div class="slide">
+        <h2>The DevOps Paradox</h2>
+        <h3>Tooling Sprawl vs. Developer Velocity</h3>
+        <div class="cols-2">
+          <div>
+            <p>Modern cloud architectures frequently demand a massive array of specialized tools to provision, manage,
+              and scale clusters. This creates significant operational overhead:</p>
+            <br>
+            <ul>
+              <li><strong>Fragmented Workflows:</strong> Tool boundaries force developers to switch contexts constantly.
+              </li>
+              <li><strong>Debugging Mismatch:</strong> Provisioning and configuration errors report through different
+                channels.</li>
+              <li><strong>High Learning Curve:</strong> Teams must learn custom syntax rules, CLI tools, and state
+                architectures.</li>
+            </ul>
+          </div>
+          <div class="glass-card danger-card">
+            <h3 class="danger-heading">The Friction Point</h3>
+            <p>Rather than writing product code, DevOps specialists spend their time translating state values,
+              credentials, and network configurations between incompatible markup formats.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: The Language Soup -->
+      <div class="slide">
+        <h2>The "Language Soup" Problem</h2>
+        <p>Traditional DevOps stacks force developers to declare and write infrastructure across multiple, incompatible
+          formats:</p>
+        <div class="card-grid">
+          <div class="glass-card">
+            <h3>Static Templates</h3>
+            <p>HCL (Terraform) or JSON (CloudFormation) defining cloud resource definitions.</p>
+          </div>
+          <div class="glass-card">
+            <h3>YAML Sprawl</h3>
+            <p>YAML files (Ansible, Helm) mimicking code constructs (loops, conditionals) via custom template layers.
+            </p>
+          </div>
+          <div class="glass-card">
+            <h3>Language Isolation</h3>
+            <p>Application logic in Python/Go, completely separated from the configuration codebase, losing type safety.
+            </p>
+          </div>
+        </div>
+        <p class="slide-footnote">The Result:
+          No IDE autocomplete, hard-to-test code blocks, and constant runtime syntax errors.</p>
+      </div>
+
+      <!-- Slide 6: The IaPy Vision -->
+      <div class="slide">
+        <h2>The Infrastructure As Python (IaPy) Vision</h2>
+        <h3>Unifying Provisioning and Configuration</h3>
+        <div class="cols-2">
+          <div>
+            <p>We propose a shift to a single, powerful general-purpose programming language for the entire lifecycle of
+              your infrastructure:</p>
+            <br>
+            <ul>
+              <li><strong>Native Logic:</strong> Write loops, conditionals, and classes directly without markup
+                workarounds.</li>
+              <li><strong>Testing Ecosystem:</strong> Run standard python test suites (e.g. pytest) to assert stack
+                properties.</li>
+              <li><strong>Robust Tooling:</strong> Benefit from the full Python ecosystem (linters, formatters, code
+                refactoring).</li>
+            </ul>
+          </div>
+          <div class="glass-card accent-border">
+            <h3>Why Python?</h3>
+            <p>Python acts as the bridge. It is already the standard for scripting, AI, data science, and cloud
+              management APIs. Unifying infrastructure code in Python eliminates cognitive transitions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: State vs. Mutation -->
+      <div class="slide">
+        <h2>State Management vs. OS Mutation</h2>
+        <h3>Dividing Responsibilities in Infrastructure Code</h3>
+        <p>A clean architecture separates the creation of cloud resources from the installation of configuration details
+          inside the OS:</p>
+        <div class="cols-2">
+          <div class="glass-card">
+            <h3 class="pulumi-heading">1. Cloud Provisioning (Pulumi)</h3>
+            <p>Focuses on cloud API lifecycle management.</p>
+            <br>
+            <ul>
+              <li>Creates networks, routers, firewalls, and VM instances.</li>
+              <li>Tracks resource associations, states, and dependencies.</li>
+              <li>Calculates structural changes (plans) declarative-style.</li>
+            </ul>
+          </div>
+          <div class="glass-card pyinfra-border">
+            <h3 class="pyinfra-heading">2. OS Configuration (PyInfra)</h3>
+            <p>Focuses on mutating host system internals.</p>
+            <br>
+            <ul>
+              <li>Installs runtime environments, libraries, and binaries.</li>
+              <li>Injects dynamic configuration templates.</li>
+              <li>Coordinates service restarts and clustering logic.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Introducing Pulumi -->
+      <div class="slide">
+        <h2>Introducing Pulumi</h2>
+        <h3>Declarative Cloud Provisioning in Python</h3>
+        <div class="cols-2">
+          <div>
+            <p>Pulumi allows developers to declare cloud resources in general-purpose languages like Python, while
+              maintaining full state tracking:</p>
+            <br>
+            <ul>
+              <li><strong>Dependency Graph:</strong> Generates resource relations implicitly based on variable
+                assignments.</li>
+              <li><strong>State Locking:</strong> Secures and tracks state to protect active infrastructure from drift.
+              </li>
+              <li><strong>Azure Native:</strong> Maps directly to Azure API calls, providing immediate access to new
+                cloud features.</li>
+            </ul>
+          </div>
+          <div class="glass-card pulumi-border">
+            <h3>Pulumi Lifecycle:</h3>
+            <ol class="card-ordered-list">
+              <li>Run `pulumi up`</li>
+              <li>Pulumi executes the Python script.</li>
+              <li>Compiles an abstract resource model.</li>
+              <li>Asserts changes against state.</li>
+              <li>Applies differences to the cloud provider.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 9: Introducing PyInfra -->
+      <div class="slide">
+        <h2>Introducing PyInfra</h2>
+        <h3>High-Speed, Agentless Server Orchestration</h3>
+        <div class="cols-2">
+          <div class="glass-card pyinfra-border">
+            <h3>Key Characteristics</h3>
+            <p>PyInfra coordinates deployment changes inside target servers without requiring heavy architectures:</p>
+            <br>
+            <ul>
+              <li><strong>Agentless Model:</strong> Connects remotely via SSH; does not require target software.</li>
+              <li><strong>Fact-Based:</strong> Gathers current OS state to determine if action is required.</li>
+              <li><strong>Asynchronous:</strong> Runs multiple server changes in parallel, optimizing execution times.
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>Unlike Ansible, which requires heavy YAML translation engines, PyInfra scripts compile into pure shell
+              commands directly inside Python. This makes execution significantly faster and provides instant code
+              debugging capabilities.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 10: Paradigm Comparison -->
+      <div class="slide">
+        <h2>The Paradigm Battle</h2>
+        <h3>Comparing Python-First Automation with Legacy Stacks</h3>
+        <div class="comparison-grid-container">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Python-First (Pulumi + PyInfra)</th>
+                <th>Traditional Stack (Terraform + Ansible)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Primary Language</strong></td>
+                <td>Python (Full programming logic)</td>
+                <td>HCL + YAML (Markup / Custom syntax)</td>
+              </tr>
+              <tr>
+                <td><strong>Execution Engine</strong></td>
+                <td>Native Python scripts / fast SSH</td>
+                <td>Custom Go parser / heavy Python runtime</td>
+              </tr>
+              <tr>
+                <td><strong>Metadata Exchange</strong></td>
+                <td>Direct programmatic outputs</td>
+                <td>Static inventory lists / text parsing</td>
+              </tr>
+              <tr>
+                <td><strong>Type Safety & Autocomplete</strong></td>
+                <td>Supported natively in IDEs</td>
+                <td>Varies, requires specialized plugins</td>
+              </tr>
+              <tr>
+                <td><strong>Testing Framework</strong></td>
+                <td>Standard libraries (`pytest`)</td>
+                <td>Custom testing utilities</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Slide 11: Repository Structure -->
+      <div class="slide">
+        <h2>Repository Structure</h2>
+        <h3>Infrastructure as Python Project Layout</h3>
+        <div class="cols-2">
+          <div class="glass-card accent-border tree-card">
+            <strong>pyconsg26/</strong><br>
+            ├── .devcontainer/<br>
+            │   └── devcontainer.json<br>
+            ├── .gitignore<br>
+            ├── index.html<br>
+            ├── styles.css<br>
+            ├── slides.js<br>
+            └── demo/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;├── README.md<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;├── pulumi/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;│   ├── Pulumi.yaml<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;│   └── __main__.py<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;└── pyinfra/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── inventory.py<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── deploy.py<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── templates/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── mongod.conf.j2
+          </div>
+          <div class="glass-card">
+            <h3>Component Roles</h3>
+            <ul class="card-list">
+              <li><strong>.devcontainer:</strong> GitHub Codespaces development setup.</li>
+              <li><strong>.gitignore:</strong> Excludes OS files, venv, and local Pulumi state backups.</li>
+              <li><strong>pulumi/:</strong> Cloud resource code (VNet, security rules, and VMs).</li>
+              <li><strong>pyinfra/:</strong> Multi-server OS management tasks, configuration templating, and replication scripting.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 12: Network Topology -->
+      <div class="slide">
+        <h2>Azure Cluster Topology & Solution</h2>
+        <h3>Visual Network and Deployment Specification</h3>
+        <div class="cols-2">
+          <div class="network-diagram-container" style="justify-content: flex-start;">
+            <div class="vnet-box" style="padding: 1rem; width: 100%;">
+              <span class="vnet-label">VNet (10.0.0.0/16)</span>
+              <div class="subnet-box" style="padding: 0.75rem; margin-top: 0.25rem;">
+                <span class="subnet-label">Subnet (10.0.1.0/24)</span>
+                <span class="nsg-label" style="font-size: 0.7rem; margin-bottom: 0.5rem; padding-bottom: 0.35rem;">NSG: Ports 22 open | 27017 restricted</span>
+                <div class="nodes-row" style="grid-template-columns: 1fr; gap: 0.4rem;">
+                  <div class="node-box primary-node" style="padding: 0.4rem;">
+                    <div class="node-title" style="font-size: 0.85rem; margin-bottom: 0;">Node 1 (Primary: 10.0.1.4)</div>
+                  </div>
+                  <div class="node-box" style="padding: 0.4rem;">
+                    <div class="node-title" style="font-size: 0.85rem; margin-bottom: 0;">Node 2 (Secondary: 10.0.1.5)</div>
+                  </div>
+                  <div class="node-box" style="padding: 0.4rem;">
+                    <div class="node-title" style="font-size: 0.85rem; margin-bottom: 0;">Node 3 (Secondary: 10.0.1.6)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h3>Target Configuration</h3>
+            <ul class="card-list">
+              <li><strong>Nodes:</strong> 3 Azure VMs (`Standard_B2s` instance size).</li>
+              <li><strong>Database:</strong> MongoDB Community Version `8.0.23`.</li>
+              <li><strong>Replication:</strong> Automated syncing under replica set `rs0`.</li>
+              <li><strong>Security:</strong> Internal IP communications; port 27017 locked down inside VNet.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 13: Metadata Handoff -->
+      <div class="slide">
+        <h2>The Metadata Handoff Pattern</h2>
+        <h3>Connecting Provisioning Outputs directly to Configuration Inputs</h3>
+        <p>Avoid managing static IP lists or text file inventories. The handoff pattern handles state exchange
+          programmatically:</p>
+        <div class="card-grid">
+          <div class="glass-card">
+            <h3>1. Export Stack Outputs</h3>
+            <p>Pulumi registers VM attributes (Public IPs, Private IPs, user credentials) and exports them securely.</p>
+          </div>
+          <div class="glass-card">
+            <h3>2. Dynamic Query</h3>
+            <p>PyInfra queries the Pulumi CLI directly during initialization to fetch stack outputs.</p>
+          </div>
+          <div class="glass-card">
+            <h3>3. Runtime Compilation</h3>
+            <p>Host parameters are constructed dynamically inside Python memory without writing static files.</p>
+          </div>
+        </div>
+        <p class="slide-footnote" style="color: var(--accent-color);">One single
+          pipeline execution. No manual metadata entry.</p>
+      </div>
+
+      <!-- Slide 14: Dynamic Discovery Workflow -->
+      <div class="slide">
+        <h2>Dynamic Host Discovery Workflow</h2>
+        <h3>How State Flows from Pulumi to PyInfra</h3>
+        <div class="workflow-container">
+          <div class="flow-step">
+            <span class="step-num">1</span>
+            <strong>Pulumi Up</strong>
+            <p>Deploys VNet, NSG, and 3 VMs on Azure.</p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <span class="step-num">2</span>
+            <strong>State Export</strong>
+            <p>Pulumi outputs dynamic IP addresses and logins.</p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <span class="step-num">3</span>
+            <strong>Output Query</strong>
+            <p>PyInfra executes stack output commands programmatically.</p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <span class="step-num">4</span>
+            <strong>Inventory Setup</strong>
+            <p>Hosts details are compiled into active connection list.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 15: Code — Pulumi Provisioning -->
+      <div class="slide">
+        <h2>Code: Pulumi VM Provisioning Loop</h2>
+        <h3>Creating 3 Azure VMs with a Python for-loop</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang">Python</span>
+            <span>demo/pulumi/__main__.py</span>
+          </div>
+          <pre><code class="highlight-python"># Provision 3 Virtual Machines
+vm_public_ips = []
+vm_private_ips = []
+
+for i in range(1, 4):
+    # Public IP Address for each VM
+    public_ip = network.PublicIPAddress(f"mongo-pip-{i}",
+        resource_group_name=resource_group.name,
+        public_ip_allocation_method="Static",
+    )
+
+    # Network Interface Card (NIC)
+    nic = network.NetworkInterface(f"mongo-nic-{i}",
+        resource_group_name=resource_group.name,
+        ip_configurations=[network.NetworkInterfaceIPConfigurationArgs(
+            name="ipconfig1",
+            subnet=network.SubnetArgs(id=subnet.id),
+            public_ip_address=network.PublicIPAddressArgs(id=public_ip.id),
+        )]
+    )
+
+    # Ubuntu 22.04 LTS VM
+    vm = compute.VirtualMachine(f"mongo-vm-{i}",
+        resource_group_name=resource_group.name,
+        hardware_profile=compute.HardwareProfileArgs(
+            vm_size="Standard_B2s"  # 2 vCPUs, 4GB RAM
+        ),
+        # ... storage, OS profile, network profile ...
+    )
+
+    vm_public_ips.append(public_ip.ip_address)
+    vm_private_ips.append(nic.ip_configurations.apply(
+        lambda configs: configs[0].private_ip_address
+    ))
+
+# Export outputs for PyInfra consumption
+pulumi.export("vm_public_ips", vm_public_ips)
+pulumi.export("vm_private_ips", vm_private_ips)
+pulumi.export("ssh_user", "azureuser")</code></pre>
+        </div>
+      </div>
+
+      <!-- Slide 16: Code — PyInfra Inventory Handoff -->
+      <div class="slide">
+        <h2>Code: The Metadata Handoff</h2>
+        <h3>PyInfra dynamically reads Pulumi stack outputs</h3>
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-lang">Python</span>
+            <span>demo/pyinfra/inventory.py</span>
+          </div>
+          <pre><code class="highlight-python">import json
+import subprocess
+
+# Query live Pulumi stack outputs — no static inventory files!
+result = subprocess.run(
+    ["pulumi", "stack", "output", "--json", "--show-secrets"],
+    cwd=_pulumi_dir,
+    capture_output=True, text=True, check=True,
+)
+outputs = json.loads(result.stdout)
+_public_ips = outputs.get("vm_public_ips", [])
+_private_ips = outputs.get("vm_private_ips", [])
+_ssh_user = outputs.get("ssh_user", "azureuser")
+
+# Build PyInfra host inventory dynamically
+mongodb_servers = []
+for i, public_ip in enumerate(_public_ips):
+    host_data = {
+        "ssh_user": _ssh_user,
+        "private_ip": _private_ips[i],
+        "node_index": i,
+        "all_nodes": _private_ips,
+    }
+    if _ssh_password:
+        host_data["ssh_password"] = _ssh_password
+    else:
+        host_data["ssh_key"] = "~/.ssh/id_rsa"
+    mongodb_servers.append((public_ip, host_data))</code></pre>
+        </div>
+      </div>
+
+      <!-- Slide 17: Code — PyInfra Deploy + Template -->
+      <div class="slide">
+        <h2>Code: Deploy & Configuration Template</h2>
+        <h3>PyInfra deploy script + Jinja2 mongod.conf template</h3>
+        <div class="cols-2">
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-lang">Python</span>
+              <span>deploy.py (excerpt)</span>
+            </div>
+            <pre><code class="highlight-python"># Deploy the mongod.conf template
+files.template(
+    name="Configure MongoDB",
+    src="templates/mongod.conf.j2",
+    dest="/etc/mongod.conf",
+    _sudo=True
+)
+
+# Start and enable mongod service
+server.service(
+    name="Restart MongoDB",
+    service="mongod",
+    running=True,
+    enabled=True,
+    restarted=True,
+    _sudo=True
+)
+
+# Init replica set on primary only
+if host.data.node_index == 0:
+    members = []
+    for idx, ip in enumerate(
+        host.data.all_nodes
+    ):
+        members.append({
+            "_id": idx,
+            "host": f"{ip}:27017"
+        })
+    server.shell(
+        name="Init replica set",
+        commands=[rs_initiate_cmd],
+        _sudo=True
+    )</code></pre>
+          </div>
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-lang">Jinja2</span>
+              <span>templates/mongod.conf.j2</span>
+            </div>
+            <pre><code class="highlight-jinja">storage:
+  dbPath: /var/lib/mongodb
+
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+net:
+  port: 27017
+  # Bind to localhost + VNet IP
+  bindIp: 127.0.0.1,{{ host.data.private_ip }}
+
+processManagement:
+  timeZoneInfo: /usr/share/zoneinfo
+
+replication:
+  replSetName: "rs0"</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 18: Deployment Pipeline -->
+      <div class="slide">
+        <h2>MongoDB Replica Set Deployment Pipeline</h2>
+        <h3>Task Steps executed concurrently by PyInfra</h3>
+        <div class="stepper-container">
+          <div class="stepper-item">
+            <div class="step-circle">1</div>
+            <div class="step-content">
+              <strong>System Prep</strong>
+              <p>Install curl, gnupg, and update APT packages.</p>
+            </div>
+          </div>
+
+          <div class="stepper-item">
+            <div class="step-circle">2</div>
+            <div class="step-content">
+              <strong>GPG & APT Setup</strong>
+              <p>Add MongoDB 8.0 key and package repository list.</p>
+            </div>
+          </div>
+
+          <div class="stepper-item">
+            <div class="step-circle">3</div>
+            <div class="step-content">
+              <strong>Pinned Install</strong>
+              <p>Install MongoDB Community Edition version 8.0.23.</p>
+            </div>
+          </div>
+
+          <div class="stepper-item">
+            <div class="step-circle">4</div>
+            <div class="step-content">
+              <strong>Configure Bindings</strong>
+              <p>Generate mongod.conf bound to local and private IP.</p>
+            </div>
+          </div>
+
+          <div class="stepper-item">
+            <div class="step-circle">5</div>
+            <div class="step-content">
+              <strong>Service Start</strong>
+              <p>Start, enable, and reload the database service daemon.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 19: Clustering Mechanics -->
+      <div class="slide">
+        <h2>Replica Set Clustering Mechanics</h2>
+        <h3>Idempotency and Primary Node Initialization</h3>
+        <div class="cols-2">
+          <div>
+            <p>To establish the multi-node replica set, we must execute the initiation command from a single primary
+              target to avoid replication conflicts:</p>
+            <br>
+            <ul>
+              <li><strong>Primary Node Election:</strong> Node 0 (the first VM in host array) is designated as the setup
+                node.</li>
+              <li><strong>Startup Delay:</strong> Add a delay to allow the database service to open ports before
+                executing shell queries.</li>
+              <li><strong>Idempotency Assertions:</strong> Check if replication is active (`rs.status().ok`) to prevent
+                errors on subsequent executions.</li>
+            </ul>
+          </div>
+          <div class="glass-card accent-border">
+            <h3>Replica Sync Steps:</h3>
+            <ol class="card-ordered-list">
+              <li>Primary node runs cluster configuration parameters.</li>
+              <li>Secondary nodes receive instructions via internal IPs.</li>
+              <li>Replication begins automatically on port 27017.</li>
+              <li>Cluster status shifts to PRIMARY and SECONDARY.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 20: Security & Secrets -->
+      <div class="slide">
+        <h2>Security & Secrets Management</h2>
+        <h3>Handling Credentials in Cloud Automation</h3>
+        <p>Securing SSH access and inter-cluster communications is critical to prevent leaks:</p>
+        <div class="card-grid">
+          <div class="glass-card">
+            <h3>SSH Key Authentication</h3>
+            <p>Uses public SSH keys deployed dynamically to VM authorized_keys files, enforcing passwordless login.</p>
+          </div>
+          <div class="glass-card">
+            <h3>SSH Passwords Option</h3>
+            <p>Allows SSH password fallback. Passwords are set through Pulumi and retrieved by PyInfra using secure
+              mechanisms.</p>
+          </div>
+          <div class="glass-card">
+            <h3>KMS Encryption</h3>
+            <p>Passwords and configuration parameters are encrypted as secrets using Pulumi's KMS encryption providers.
+            </p>
+          </div>
+        </div>
+        <p class="slide-footnote">All secret
+          parameters are automatically redacted from execution logs.</p>
+      </div>
+
+      <!-- Slide 21: Enterprise Practices -->
+      <div class="slide">
+        <h2>Enterprise Best Practices</h2>
+        <h3>Taking Infrastructure as Python to Production</h3>
+        <div class="cols-2">
+          <div class="glass-card">
+            <h3>1. Dry-Run Pipelines</h3>
+            <p>Execute scripts in preview mode to verify actions before mutating cloud resources or server states:</p>
+            <ul>
+              <li>`pulumi preview`</li>
+              <li>`pyinfra --dry`</li>
+            </ul>
+          </div>
+          <div class="glass-card pyinfra-border">
+            <h3>2. Testing Infrastructure</h3>
+            <p>Use testing frameworks to assert system states:</p>
+            <ul>
+              <li>Assert correct port binding.</li>
+              <li>Assert security rule limitations.</li>
+              <li>Verify replica set configuration metrics.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 22: Common Pitfalls & Resolutions -->
+      <div class="slide">
+        <h2>Common Pitfalls & Resolutions</h2>
+        <div class="card-grid">
+          <div class="glass-card">
+            <h3>1. VM Race Conditions</h3>
+            <strong>Problem:</strong> SSH connections fail if PyInfra runs before the target VM completes bootup.<br>
+            <strong>Resolution:</strong> Inject connection check timeouts and startup sleep statements.
+          </div>
+          <div class="glass-card">
+            <h3>2. Dynamic Var Parsing</h3>
+            <strong>Problem:</strong> PyInfra parses all global list variables as inventory lists.<br>
+            <strong>Resolution:</strong> Prefix all local inventory helper variables with leading underscores (e.g.
+            `_public_ips`).
+          </div>
+          <div class="glass-card">
+            <h3>3. Secret Redaction</h3>
+            <strong>Problem:</strong> Stack outputs mask secrets by default, breaking inventory variables.<br>
+            <strong>Resolution:</strong> Call output requests explicitly with `--show-secrets` to allow PyInfra access.
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 23: Takeaways & Q&A -->
+      <div class="slide">
+        <h2>Key Takeaways & Conclusion</h2>
+        <div class="cols-2">
+          <div>
+            <p>Adopting an Infrastructure as Python (IaPy) approach using Pulumi and PyInfra provides critical benefits:
+            </p>
+            <br>
+            <ul>
+              <li><strong>Single Language:</strong> Unified developer tooling across coding and operations.</li>
+              <li><strong>Dynamic Pipelines:</strong> Real-time metadata handoff without text-file parsing.</li>
+              <li><strong>Execution Speed:</strong> Parallelized SSH tasks complete VM deployments in seconds.</li>
+            </ul>
+            <br>
+            <p><strong>GitHub Code Repo:</strong><br><a href="https://github.com/ninefyi/pyconsg26" target="_blank"
+                class="accent-link" style="font-weight: 500;">github.com/ninefyi/pyconsg26</a>
+            </p>
+          </div>
+          <div class="glass-card qa-card">
+            <h3>Questions & Answers</h3>
+            <p class="qa-prompt">What questions do you have about Python-native cloud orchestration?</p>
+            <div class="qa-emoji">💬</div>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://github.com/ninefyi/pyconsg26&bgcolor=ffffff&color=059669"
+              alt="QR code to github.com/ninefyi/pyconsg26" class="qr-code">
+            <p class="card-detail">Scan to visit the repo</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="progress-info">
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text">Slide 1 of 20</div>
+      </div>
+
+      <div class="controls-nav">
+        <button id="prev-btn" class="control-btn" aria-label="Previous Slide" disabled>&lt;</button>
+        <button id="next-btn" class="control-btn" aria-label="Next Slide">&gt;</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="slides.js"></script>
+</body>
+
+</html>

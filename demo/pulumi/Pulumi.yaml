@@ -1,0 +1,6 @@
+name: azure-mongodb-cluster
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: A Pulumi Python program to deploy 3 MongoDB nodes on Azure VMs for PyConSG 2026.
