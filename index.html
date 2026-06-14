@@ -40,19 +40,20 @@
         <li class="nav-item" data-slide-index="7">8. Introducing Pulumi</li>
         <li class="nav-item" data-slide-index="8">9. Introducing PyInfra</li>
         <li class="nav-item" data-slide-index="9">10. Paradigm Comparison</li>
-        <li class="nav-item" data-slide-index="10">11. Repo Structure</li>
-        <li class="nav-item" data-slide-index="11">12. Network Topology</li>
-        <li class="nav-item" data-slide-index="12">13. Metadata Handoff</li>
-        <li class="nav-item" data-slide-index="13">14. Discovery Workflow</li>
-        <li class="nav-item" data-slide-index="14">15. Code: Pulumi</li>
-        <li class="nav-item" data-slide-index="15">16. Code: Inventory</li>
-        <li class="nav-item" data-slide-index="16">17. Code: Deploy</li>
-        <li class="nav-item" data-slide-index="17">18. Deployment Pipeline</li>
-        <li class="nav-item" data-slide-index="18">19. Clustering Mechanics</li>
-        <li class="nav-item" data-slide-index="19">20. Security & Secrets</li>
-        <li class="nav-item" data-slide-index="20">21. Enterprise Practices</li>
-        <li class="nav-item" data-slide-index="21">22. Pitfalls & Resolutions</li>
-        <li class="nav-item" data-slide-index="22">23. Takeaways & Q&A</li>
+        <li class="nav-item" data-slide-index="10">11. Solution Architecture</li>
+        <li class="nav-item" data-slide-index="11">12. Repo Structure</li>
+        <li class="nav-item" data-slide-index="12">13. Network Topology</li>
+        <li class="nav-item" data-slide-index="13">14. Metadata Handoff</li>
+        <li class="nav-item" data-slide-index="14">15. Discovery Workflow</li>
+        <li class="nav-item" data-slide-index="15">16. Code: Pulumi</li>
+        <li class="nav-item" data-slide-index="16">17. Code: Inventory</li>
+        <li class="nav-item" data-slide-index="17">18. Code: Deploy</li>
+        <li class="nav-item" data-slide-index="18">19. Deployment Pipeline</li>
+        <li class="nav-item" data-slide-index="19">20. Clustering Mechanics</li>
+        <li class="nav-item" data-slide-index="20">21. Security & Secrets</li>
+        <li class="nav-item" data-slide-index="21">22. Enterprise Practices</li>
+        <li class="nav-item" data-slide-index="22">23. Pitfalls & Resolutions</li>
+        <li class="nav-item" data-slide-index="23">24. Takeaways & Q&A</li>
       </ul>
     </nav>
 
@@ -64,6 +65,14 @@
 
   <!-- Main Slide Display -->
   <main class="slides-container">
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebarToggle" class="sidebar-toggle" title="Toggle Sidebar (Press S)" aria-label="Toggle Sidebar">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M2 4a1 1 0 011-1h14a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4z" stroke="currentColor" stroke-width="1" fill="none"/>
+        <path d="M2 4h3v12H2z" fill="currentColor" opacity="0.3"/>
+      </svg>
+    </button>
+
     <div class="slide-deck">
 
       <!-- Slide 1: Title -->
@@ -355,7 +364,18 @@
         </div>
       </div>
 
-      <!-- Slide 11: Repository Structure -->
+      <!-- Slide 11: Solution Architecture -->
+      <div class="slide">
+        <h2>Solution Architecture</h2>
+        <h3>Pulumi + PyInfra + Azure + MongoDB Distributed System</h3>
+        <div class="architecture-image-container">
+          <img src="references/architecture-diagram.png" alt="Solution Architecture Diagram" class="architecture-image" id="architectureImage" style="cursor: pointer;">
+          <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">Click to expand</p>
+        </div>
+        <p class="slide-footnote" style="margin-top: 1rem;">Complete overview: Pulumi provisions Azure infrastructure → PyInfra deploys MongoDB replica set via SSH configuration</p>
+      </div>
+
+      <!-- Slide 12: Repository Structure -->
       <div class="slide">
         <h2>Repository Structure</h2>
         <h3>Infrastructure as Python Project Layout</h3>
@@ -391,7 +411,7 @@
         </div>
       </div>
 
-      <!-- Slide 12: Network Topology -->
+      <!-- Slide 13: Network Topology -->
       <div class="slide">
         <h2>Azure Cluster Topology & Solution</h2>
         <h3>Visual Network and Deployment Specification</h3>
@@ -428,7 +448,7 @@
         </div>
       </div>
 
-      <!-- Slide 13: Metadata Handoff -->
+      <!-- Slide 14: Metadata Handoff -->
       <div class="slide">
         <h2>The Metadata Handoff Pattern</h2>
         <h3>Connecting Provisioning Outputs directly to Configuration Inputs</h3>
@@ -452,7 +472,7 @@
           pipeline execution. No manual metadata entry.</p>
       </div>
 
-      <!-- Slide 14: Dynamic Discovery Workflow -->
+      <!-- Slide 15: Dynamic Discovery Workflow -->
       <div class="slide">
         <h2>Dynamic Host Discovery Workflow</h2>
         <h3>How State Flows from Pulumi to PyInfra</h3>
@@ -483,7 +503,7 @@
         </div>
       </div>
 
-      <!-- Slide 15: Code — Pulumi Provisioning -->
+      <!-- Slide 16: Code — Pulumi Provisioning -->
       <div class="slide">
         <h2>Code: Pulumi VM Provisioning Loop</h2>
         <h3>Creating 3 Azure VMs with a Python for-loop</h3>
@@ -539,7 +559,7 @@ if has_password:
         </div>
       </div>
 
-      <!-- Slide 16: Code — PyInfra Inventory Handoff -->
+      <!-- Slide 17: Code — PyInfra Inventory Handoff -->
       <div class="slide">
         <h2>Code: The Metadata Handoff</h2>
         <h3>PyInfra dynamically reads Pulumi stack outputs</h3>
@@ -664,7 +684,7 @@ security:
         </div>
       </div>
 
-      <!-- Slide 18: Deployment Pipeline -->
+      <!-- Slide 19: Deployment Pipeline -->
       <div class="slide">
         <h2>MongoDB Replica Set Deployment Pipeline</h2>
         <h3>Task Steps executed concurrently by PyInfra</h3>
@@ -711,7 +731,7 @@ security:
         </div>
       </div>
 
-      <!-- Slide 19: Clustering Mechanics -->
+      <!-- Slide 20: Clustering Mechanics -->
       <div class="slide">
         <h2>Replica Set Clustering Mechanics</h2>
         <h3>Idempotency and Primary Node Initialization</h3>
@@ -766,7 +786,7 @@ security:
           parameters are automatically redacted from execution logs.</p>
       </div>
 
-      <!-- Slide 21: Enterprise Practices -->
+      <!-- Slide 22: Enterprise Practices -->
       <div class="slide">
         <h2>Enterprise Best Practices</h2>
         <h3>Taking Infrastructure as Python to Production</h3>
@@ -814,7 +834,7 @@ security:
         </div>
       </div>
 
-      <!-- Slide 23: Takeaways & Q&A -->
+      <!-- Slide 24: Takeaways & Q&A -->
       <div class="slide">
         <h2>Key Takeaways & Conclusion</h2>
         <div class="cols-2">
@@ -859,9 +879,80 @@ security:
         <button id="next-btn" class="control-btn" aria-label="Next Slide">&gt;</button>
       </div>
     </div>
+
+    <!-- Full-Screen Architecture Modal -->
+    <div id="architectureModal" class="architecture-modal">
+      <div class="architecture-modal-content">
+        <button class="architecture-modal-close" id="closeArchitectureModal">&times;</button>
+        <img id="architectureModalImage" src="references/architecture-diagram.png" alt="Solution Architecture Diagram" class="architecture-modal-image">
+      </div>
+    </div>
   </main>
 
   <script src="slides.js"></script>
+
+  <script>
+    // Full-screen architecture diagram functionality
+    const architectureImage = document.getElementById('architectureImage');
+    const architectureModal = document.getElementById('architectureModal');
+    const closeButton = document.getElementById('closeArchitectureModal');
+
+    architectureImage.addEventListener('click', function() {
+      architectureModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeButton.addEventListener('click', function() {
+      architectureModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    });
+
+    architectureModal.addEventListener('click', function(event) {
+      if (event.target === architectureModal) {
+        architectureModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && architectureModal.style.display === 'flex') {
+        architectureModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Sidebar toggle functionality
+    const sidebar = document.querySelector('aside.sidebar');
+    const mainContainer = document.querySelector('main.slides-container');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const SIDEBAR_STATE_KEY = 'pyconsg26_sidebar_hidden';
+
+    // Initialize sidebar state from localStorage
+    const isSidebarHidden = localStorage.getItem(SIDEBAR_STATE_KEY) === 'true';
+    if (isSidebarHidden) {
+      sidebar.classList.add('hidden');
+      mainContainer.classList.add('sidebar-hidden');
+      sidebarToggle.classList.add('active');
+    }
+
+    // Toggle sidebar visibility
+    sidebarToggle.addEventListener('click', function() {
+      const isHidden = sidebar.classList.toggle('hidden');
+      mainContainer.classList.toggle('sidebar-hidden');
+      sidebarToggle.classList.toggle('active');
+      localStorage.setItem(SIDEBAR_STATE_KEY, isHidden);
+    });
+
+    // Keyboard shortcut: Press 'S' to toggle sidebar
+    document.addEventListener('keydown', function(event) {
+      if (event.key.toLowerCase() === 's' && 
+          document.activeElement.tagName !== 'INPUT' && 
+          document.activeElement.tagName !== 'TEXTAREA' &&
+          architectureModal.style.display !== 'flex') {
+        sidebarToggle.click();
+      }
+    });
+  </script>
 </body>
 
 </html>

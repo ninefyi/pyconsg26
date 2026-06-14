@@ -22,7 +22,8 @@
         "ms-python.vscode-pylance",
         "ms-vscode.azurecli",
         "ms-azuretools.vscode-azureresourcegroups",
-        "ritwickdey.LiveServer"
+        "ritwickdey.LiveServer",
+        "purocean.drawio-preview"
       ]
     }
   }

@@ -1,0 +1,303 @@
+<mxfile host="app.diagrams.net" version="21.0.0" type="device">
+  <diagram id="pyconsg26-architecture" name="Pulumi + PyInfra + Azure + MongoDB">
+    <mxGraphModel background="#0d1117" dx="1200" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- TITLE                                   -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="2"
+          value="Solution Architecture: Pulumi + PyInfra + Azure + MongoDB"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#58a6ff;"
+          vertex="1" parent="1">
+          <mxGeometry x="500" y="25" width="1000" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- LEGEND                                  -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="3"
+          value="Legend: Responsibility Matrix"
+          style="swimlane;fillColor=#1c1f26;strokeColor=#6b7280;fontColor=#9ca3af;fontSize=11;fontStyle=1;startSize=30;dashed=1;dashPattern=8 4;rounded=1;arcSize=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="1680" y="28" width="470" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="4"
+          value="PyInfra: OS Configuration&#xa;(Agentless SSH-based)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#059669;strokeColor=#10b981;fontColor=#ffffff;fontSize=10;fontStyle=1;"
+          vertex="1" parent="3">
+          <mxGeometry x="15" y="40" width="205" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="5"
+          value="Pulumi: Cloud Provisioning&#xa;(Declarative IaC)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4f46e5;strokeColor=#818cf8;fontColor=#ffffff;fontSize=10;fontStyle=1;"
+          vertex="1" parent="3">
+          <mxGeometry x="245" y="40" width="205" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- EXTERNAL ACCESS CLUSTER                 -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="6"
+          value="External Access"
+          style="swimlane;fillColor=none;strokeColor=#a855f7;fontColor=#d8b4fe;fontSize=12;fontStyle=1;startSize=30;dashed=1;dashPattern=8 4;rounded=1;arcSize=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="20" y="365" width="335" height="185" as="geometry" />
+        </mxCell>
+        <mxCell id="7"
+          value="MongoDB Client&#xa;(mongosh, drivers)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6b21a8;strokeColor=#d8b4fe;fontColor=#ffffff;fontSize=10;"
+          vertex="1" parent="6">
+          <mxGeometry x="15" y="42" width="145" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="8"
+          value="User / Developer"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6b21a8;strokeColor=#d8b4fe;fontColor=#ffffff;fontSize=11;"
+          vertex="1" parent="6">
+          <mxGeometry x="175" y="42" width="145" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- LOCAL ORCHESTRATION CLUSTER             -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="9"
+          value="Local Orchestration"
+          style="swimlane;fillColor=none;strokeColor=#6366f1;fontColor=#818cf8;fontSize=12;fontStyle=1;startSize=30;dashed=1;dashPattern=8 4;rounded=1;arcSize=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="390" y="110" width="238" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="10"
+          value="Pulumi CLI"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4f46e5;strokeColor=#818cf8;fontColor=#ffffff;fontSize=13;fontStyle=1;"
+          vertex="1" parent="9">
+          <mxGeometry x="29" y="42" width="180" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="11"
+          value="PyInfra CLI"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#059669;strokeColor=#10b981;fontColor=#ffffff;fontSize=13;fontStyle=1;"
+          vertex="1" parent="9">
+          <mxGeometry x="29" y="278" width="180" height="62" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- AZURE CLOUD CLUSTER                     -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="12"
+          value="Azure Cloud (Provisioned by Pulumi)"
+          style="swimlane;fillColor=#0c2d48;strokeColor=#0ea5e9;fontColor=#7dd3fc;fontSize=13;fontStyle=1;startSize=34;rounded=1;arcSize=4;"
+          vertex="1" parent="1">
+          <mxGeometry x="655" y="110" width="1145" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="13"
+          value="Resource Group&#xa;(rg-pyconsg-mdb)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#075985;strokeColor=#0ea5e9;fontColor=#ffffff;fontSize=11;"
+          vertex="1" parent="12">
+          <mxGeometry x="26" y="65" width="210" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- Virtual Network Container -->
+        <mxCell id="14"
+          value="Virtual Network (10.0.0.0/16)"
+          style="swimlane;fillColor=none;strokeColor=#7dd3fc;fontColor=#7dd3fc;fontSize=11;fontStyle=1;startSize=30;dashed=1;dashPattern=8 4;rounded=1;arcSize=6;"
+          vertex="1" parent="12">
+          <mxGeometry x="16" y="178" width="1108" height="462" as="geometry" />
+        </mxCell>
+        <mxCell id="15"
+          value="VNet&#xa;10.0.0.0/16"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#164e63;strokeColor=#7dd3fc;fontColor=#ffffff;fontSize=11;"
+          vertex="1" parent="14">
+          <mxGeometry x="16" y="196" width="155" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- Subnet Container -->
+        <mxCell id="16"
+          value="Subnet (10.0.1.0/24)"
+          style="swimlane;fillColor=none;strokeColor=#7dd3fc;fontColor=#7dd3fc;fontSize=11;fontStyle=1;startSize=30;dashed=1;dashPattern=8 4;rounded=1;arcSize=6;"
+          vertex="1" parent="14">
+          <mxGeometry x="202" y="36" width="890" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="17"
+          value="Network Security Group&#xa;SSH:22 (restricted)&#xa;MongoDB:27017 (VNet-only)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ea580c;strokeColor=#fdba74;fontColor=#ffffff;fontSize=10;"
+          vertex="1" parent="16">
+          <mxGeometry x="323" y="38" width="240" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="18"
+          value="Azure VM 1 (Primary)&#xa;Standard_B2s&#xa;Public IP: dynamic&#xa;Private IP: 10.0.1.4"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#059669;strokeColor=#10b981;fontColor=#ffffff;fontSize=10;"
+          vertex="1" parent="16">
+          <mxGeometry x="30" y="205" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="19"
+          value="Azure VM 2 (Secondary)&#xa;Standard_B2s&#xa;Public IP: dynamic&#xa;Private IP: 10.0.1.5"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#059669;strokeColor=#10b981;fontColor=#ffffff;fontSize=10;"
+          vertex="1" parent="16">
+          <mxGeometry x="333" y="205" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="20"
+          value="Azure VM 3 (Secondary)&#xa;Standard_B2s&#xa;Public IP: dynamic&#xa;Private IP: 10.0.1.6"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#059669;strokeColor=#10b981;fontColor=#ffffff;fontSize=10;"
+          vertex="1" parent="16">
+          <mxGeometry x="636" y="205" width="225" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- OS CONFIGURATION CLUSTER                -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="21"
+          value="OS Configuration (Deployed by PyInfra via SSH)"
+          style="swimlane;fillColor=#064e3b;strokeColor=#10b981;fontColor=#6ee7b7;fontSize=12;fontStyle=1;startSize=34;rounded=1;arcSize=4;"
+          vertex="1" parent="1">
+          <mxGeometry x="655" y="825" width="865" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="22"
+          value="mongod (Primary)&#xa;Port: 27017&#xa;Role: Primary"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dc2626;strokeColor=#f87171;fontColor=#ffffff;fontSize=11;fontStyle=1;"
+          vertex="1" parent="21">
+          <mxGeometry x="105" y="55" width="215" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="23"
+          value="mongod (Secondary)&#xa;Port: 27017&#xa;Role: Secondary"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dc2626;strokeColor=#f87171;fontColor=#ffffff;fontSize=11;"
+          vertex="1" parent="21">
+          <mxGeometry x="105" y="258" width="215" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="24"
+          value="mongod (Secondary)&#xa;Port: 27017&#xa;Role: Secondary"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dc2626;strokeColor=#f87171;fontColor=#ffffff;fontSize=11;"
+          vertex="1" parent="21">
+          <mxGeometry x="540" y="448" width="215" height="82" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- EDGES — Internal (Local Orchestration)  -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- Pulumi CLI → PyInfra CLI: exports stack outputs -->
+        <mxCell id="25"
+          value="exports&#xa;stack outputs"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#8b949e;fontColor=#8b949e;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;"
+          edge="1" source="10" target="11" parent="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- EDGES — Internal (Azure Cloud)          -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- Resource Group → VNet: contains -->
+        <mxCell id="26"
+          value="contains"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#8b949e;fontColor=#8b949e;fontSize=9;"
+          edge="1" source="13" target="14" parent="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- EDGES — Internal (Subnet)               -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- NSG → VM1 -->
+        <mxCell id="27"
+          value="port 22&#xa;port 27017"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#fdba74;fontColor=#8b949e;fontSize=8;"
+          edge="1" source="17" target="18" parent="16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- NSG → VM2 -->
+        <mxCell id="28"
+          value="port 22&#xa;port 27017"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#fdba74;fontColor=#8b949e;fontSize=8;"
+          edge="1" source="17" target="19" parent="16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- NSG → VM3 -->
+        <mxCell id="29"
+          value="port 22&#xa;port 27017"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#fdba74;fontColor=#8b949e;fontSize=8;"
+          edge="1" source="17" target="20" parent="16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- EDGES — Internal (OS Config)            -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- mongod Primary → Secondary 1: heartbeat & oplog sync -->
+        <mxCell id="30"
+          value="heartbeat &amp;&#xa;oplog sync"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f87171;fontColor=#8b949e;fontSize=9;"
+          edge="1" source="22" target="23" parent="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- mongod Primary → Secondary 2: heartbeat & oplog sync -->
+        <mxCell id="31"
+          value="heartbeat &amp;&#xa;oplog sync"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f87171;fontColor=#8b949e;fontSize=9;"
+          edge="1" source="22" target="24" parent="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Secondary 1 → Secondary 2: peer sync -->
+        <mxCell id="32"
+          value="peer sync"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f87171;fontColor=#8b949e;fontSize=9;dashed=1;dashPattern=5 3;"
+          edge="1" source="23" target="24" parent="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- EDGES — Cross-Container                 -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- Pulumi CLI → Resource Group: provision -->
+        <mxCell id="33"
+          value="provision"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#4f46e5;fontColor=#818cf8;fontSize=10;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"
+          edge="1" source="10" target="13" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PyInfra CLI → VM1: SSH config -->
+        <mxCell id="34"
+          value="SSH config"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;fontColor=#10b981;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"
+          edge="1" source="11" target="18" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- PyInfra CLI → VM2: SSH config -->
+        <mxCell id="35"
+          value="SSH config"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;fontColor=#10b981;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"
+          edge="1" source="11" target="19" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- PyInfra CLI → VM3: SSH config -->
+        <mxCell id="36"
+          value="SSH config"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;fontColor=#10b981;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"
+          edge="1" source="11" target="20" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User/Developer → VM1: SSH access (public IP) -->
+        <mxCell id="37"
+          value="SSH access&#xa;(public IP)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#a855f7;fontColor=#d8b4fe;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"
+          edge="1" source="8" target="18" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- MongoDB Client → mongod Primary: MongoDB protocol (private IP) -->
+        <mxCell id="38"
+          value="MongoDB protocol&#xa;(private IP)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#dc2626;fontColor=#f87171;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"
+          edge="1" source="7" target="22" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
