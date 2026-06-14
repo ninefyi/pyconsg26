@@ -41,6 +41,8 @@ pyconsg26/
 
 ### 🚀 View the Slides
 
+Live site: [pyconsg26.mrpiti.dev](https://pyconsg26.mrpiti.dev)
+
 Open `index.html` in your browser, or use the keyboard shortcuts:
 - **← / →** — Navigate slides
 - **Space** — Next slide
