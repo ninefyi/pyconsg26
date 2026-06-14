@@ -47,6 +47,18 @@ apt.packages(
     _sudo=True
 )
 
+if host.data.enable_mongodb_auth:
+    # The mongodb uazser/group are created by mongodb-org packages.
+    files.put(
+        name="Install MongoDB replica keyfile",
+        src=StringIO(f"{host.data.mongodb_keyfile_content}\n"),
+        dest=host.data.mongodb_keyfile_path,
+        user="mongodb",
+        group="mongodb",
+        mode="400",
+        _sudo=True
+    )
+
 # Deploy the configuration template
 files.template(
     name="Configure MongoDB mongod.conf",
@@ -83,13 +95,22 @@ if host.data.node_index == 0:
     
     # Serialize to JSON format for mongosh script execution
     members_json = json.dumps(members).replace('"', "'")
+
+    rs_initiate_cmd = (
+        "mongosh --quiet --eval \""
+        "try { const st = rs.status(); if (st.ok === 1) { print('Replica set already initialized'); quit(0); } } catch (e) {} "
+        f"rs.initiate({{ _id: 'rs0', members: {members_json} }});"
+        "\""
+    )
     
     # Run the initiation script. It checks if replica set is already initiated to ensure idempotency.
     server.shell(
         name="Initialize replica set on Primary node",
         commands=[
-            "sleep 10",  # Wait for MongoDB to finish starting up and open port 27017
-            f"mongosh --eval \"try {{ if (!rs.status().ok) {{ rs.initiate({{ _id: 'rs0', members: {members_json} }}); }} }} catch (e) {{ rs.initiate({{ _id: 'rs0', members: {members_json} }}); }}\""
+            "for i in $(seq 1 60); do mongosh --quiet --eval \"db.adminCommand({ ping: 1 }).ok\" >/dev/null 2>&1 && break; sleep 2; done",
+            "mongosh --quiet --eval \"db.adminCommand({ ping: 1 }).ok\" >/dev/null 2>&1 || (echo 'MongoDB did not become ready in time' && exit 1)",
+            rs_initiate_cmd,
+            "for i in $(seq 1 90); do mongosh --quiet --eval \"const st = rs.status(); if (st.ok !== 1) quit(1); const primary = st.members.filter(m => m.stateStr === 'PRIMARY').length; const secondaries = st.members.filter(m => m.stateStr === 'SECONDARY').length; if (primary === 1 && secondaries >= 1) { printjson({ ok: st.ok, primary, secondaries }); quit(0); } quit(2);\" && exit 0; sleep 2; done; echo 'Replica set did not reach healthy state in time'; exit 1"
         ],
         _sudo=True
     )

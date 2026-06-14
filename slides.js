@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressText = document.querySelector('.progress-text');
   
   let currentSlide = 0;
+
+  // Initialize progress display on load
+  progressText.textContent = `Slide 1 of ${slides.length}`;
+  prevBtn.disabled = true;
+  nextBtn.disabled = slides.length <= 1;
   
   // 1. Syntax Highlighting Setup
   function highlightSnippet(codeElement, lang) {

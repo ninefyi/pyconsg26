@@ -35,6 +35,8 @@ body {
 /* Sidebar Styling */
 aside.sidebar {
   width: var(--sidebar-width);
+  height: 100vh;
+  overflow: hidden;
   background: var(--panel-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -45,6 +47,13 @@ aside.sidebar {
   justify-content: space-between;
   z-index: 100;
   flex-shrink: 0;
+  min-height: 0;
+}
+
+aside.sidebar nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
 }
 
 .sidebar-brand h2 {
@@ -71,15 +80,25 @@ aside.sidebar {
   gap: 0.5rem;
   overflow-y: auto;
   padding-right: 0.25rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 23, 42, 0.28) transparent;
 }
 
 /* Custom Scrollbar for sidebar */
 .sidebar-nav::-webkit-scrollbar {
-  width: 4px;
+  width: 7px;
 }
 .sidebar-nav::-webkit-scrollbar-thumb {
-  background: var(--panel-border);
-  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.24);
+  border-radius: 8px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.38);
 }
 
 .nav-item {

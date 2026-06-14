@@ -18,3 +18,9 @@ processManagement:
 
 replication:
   replSetName: "rs0"
+
+{% if host.data.enable_mongodb_auth %}
+security:
+  authorization: enabled
+  keyFile: {{ host.data.mongodb_keyfile_path }}
+{% endif %}

@@ -84,7 +84,7 @@
           <div class="glass-card">
             <h3>Piti Champeethong</h3>
             <p class="card-subtitle">Senior Consulting Engineer at MongoDB | Microsoft MVP</p>
-            <p class="card-body">Over 20 years of experience in software development and database application design. Leader of the MongoDB User Group Thailand.</p>
+            <p class="card-body">Over 20 years of experience in software development and database application design. MongoDB User Group Leader in Thailand.</p>
             <ul class="card-list">
               <li>Expertise in MongoDB, Azure, Python, and CI/CD pipelines.</li>
               <li>Active speaker at technology conferences and user groups.</li>
@@ -497,31 +497,34 @@ vm_public_ips = []
 vm_private_ips = []
 
 for i in range(1, 4):
-    # Public IP Address for each VM
     public_ip = network.PublicIPAddress(f"mongo-pip-{i}",
         resource_group_name=resource_group.name,
         public_ip_allocation_method="Static",
+        dns_settings=network.PublicIPAddressDnsSettingsArgs(
+            domain_name_label=f"pyconsg-mongo-{i}"
+        )
     )
-
-    # Network Interface Card (NIC)
     nic = network.NetworkInterface(f"mongo-nic-{i}",
         resource_group_name=resource_group.name,
         ip_configurations=[network.NetworkInterfaceIPConfigurationArgs(
             name="ipconfig1",
             subnet=network.SubnetArgs(id=subnet.id),
             public_ip_address=network.PublicIPAddressArgs(id=public_ip.id),
+            private_ip_allocation_method="Static",
+            private_ip_address=f"10.0.1.{3 + i}"
         )]
     )
-
-    # Ubuntu 22.04 LTS VM
     vm = compute.VirtualMachine(f"mongo-vm-{i}",
         resource_group_name=resource_group.name,
         hardware_profile=compute.HardwareProfileArgs(
             vm_size="Standard_B2s"  # 2 vCPUs, 4GB RAM
         ),
-        # ... storage, OS profile, network profile ...
+        os_profile=compute.OSProfileArgs(
+            computer_name=f"mongo-node-{i}",
+            admin_username="azureuser",
+        ),
+        # ... storage_profile, network_profile ...
     )
-
     vm_public_ips.append(public_ip.ip_address)
     vm_private_ips.append(nic.ip_configurations.apply(
         lambda configs: configs[0].private_ip_address
@@ -530,7 +533,9 @@ for i in range(1, 4):
 # Export outputs for PyInfra consumption
 pulumi.export("vm_public_ips", vm_public_ips)
 pulumi.export("vm_private_ips", vm_private_ips)
-pulumi.export("ssh_user", "azureuser")</code></pre>
+pulumi.export("ssh_user", "azureuser")
+if has_password:
+    pulumi.export("ssh_password", ssh_password)</code></pre>
         </div>
       </div>
 
@@ -543,14 +548,17 @@ pulumi.export("ssh_user", "azureuser")</code></pre>
             <span class="code-lang">Python</span>
             <span>demo/pyinfra/inventory.py</span>
           </div>
-          <pre><code class="highlight-python">import json
-import subprocess
+          <pre><code class="highlight-python">import json, os, subprocess
+
+# Resolve pulumi dir relative to this script
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_pulumi_dir = os.path.join(_script_dir, "..", "pulumi")
 
 # Query live Pulumi stack outputs — no static inventory files!
 result = subprocess.run(
     ["pulumi", "stack", "output", "--json", "--show-secrets"],
-    cwd=_pulumi_dir,
-    capture_output=True, text=True, check=True,
+    cwd=_pulumi_dir, capture_output=True,
+    text=True, check=True, timeout=30,
 )
 outputs = json.loads(result.stdout)
 _public_ips = outputs.get("vm_public_ips", [])
@@ -562,9 +570,12 @@ mongodb_servers = []
 for i, public_ip in enumerate(_public_ips):
     host_data = {
         "ssh_user": _ssh_user,
+        "ssh_strict_host_key_checking": "no",
         "private_ip": _private_ips[i],
         "node_index": i,
+        "node_name": f"mongo-node-{i+1}",
         "all_nodes": _private_ips,
+        "enable_mongodb_auth": enable_mongodb_auth,
     }
     if _ssh_password:
         host_data["ssh_password"] = _ssh_password
@@ -584,36 +595,38 @@ for i, public_ip in enumerate(_public_ips):
               <span class="code-lang">Python</span>
               <span>deploy.py (excerpt)</span>
             </div>
-            <pre><code class="highlight-python"># Deploy the mongod.conf template
+            <pre><code class="highlight-python"># Install MongoDB 8.0.23 (pinned packages)
+apt.packages(
+    name="Install MongoDB Community Edition 8.0.23 packages",
+    packages=["mongodb-org=8.0.23", "mongodb-mongosh"],
+    update=True, _sudo=True
+)
+
+# Deploy the mongod.conf template
 files.template(
-    name="Configure MongoDB",
+    name="Configure MongoDB mongod.conf",
     src="templates/mongod.conf.j2",
     dest="/etc/mongod.conf",
-    _sudo=True
+    user="root", group="root",
+    mode="644", _sudo=True
 )
 
 # Start and enable mongod service
 server.service(
-    name="Restart MongoDB",
+    name="Restart and enable MongoDB service",
     service="mongod",
-    running=True,
-    enabled=True,
-    restarted=True,
-    _sudo=True
+    running=True, enabled=True,
+    restarted=True, _sudo=True
 )
 
-# Init replica set on primary only
+# Init replica set on Primary node only
 if host.data.node_index == 0:
-    members = []
-    for idx, ip in enumerate(
-        host.data.all_nodes
-    ):
-        members.append({
-            "_id": idx,
-            "host": f"{ip}:27017"
-        })
+    members = [
+        {"_id": idx, "host": f"{ip}:27017"}
+        for idx, ip in enumerate(host.data.all_nodes)
+    ]
     server.shell(
-        name="Init replica set",
+        name="Initialize replica set on Primary node",
         commands=[rs_initiate_cmd],
         _sudo=True
     )</code></pre>
@@ -633,14 +646,20 @@ systemLog:
 
 net:
   port: 27017
-  # Bind to localhost + VNet IP
+  # Bind to localhost + VNet private IP
   bindIp: 127.0.0.1,{{ host.data.private_ip }}
 
 processManagement:
   timeZoneInfo: /usr/share/zoneinfo
 
 replication:
-  replSetName: "rs0"</code></pre>
+  replSetName: "rs0"
+
+{% if host.data.enable_mongodb_auth %}
+security:
+  authorization: enabled
+  keyFile: {{ host.data.mongodb_keyfile_path }}
+{% endif %}</code></pre>
           </div>
         </div>
       </div>
@@ -832,7 +851,7 @@ replication:
         <div class="progress-track">
           <div class="progress-fill"></div>
         </div>
-        <div class="progress-text">Slide 1 of 20</div>
+        <div class="progress-text">Slide 1 of 23</div>
       </div>
 
       <div class="controls-nav">

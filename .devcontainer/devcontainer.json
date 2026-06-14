@@ -1,13 +1,17 @@
 {
   "name": "Pulumi & PyInfra MongoDB Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/python:3.10",
-  "features": {
-    "ghcr.io/devcontainers/features/azure-cli:1": {}
+  "image": "mcr.microsoft.com/devcontainers/python:3.14",
+  "forwardPorts": [5500],
+  "portsAttributes": {
+    "5500": {
+      "label": "Live Server",
+      "onAutoForward": "openBrowser"
+    }
   },
-  "containerEnv": {
+  "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/home/vscode/.pulumi/bin"
   },
-  "postCreateCommand": "curl -fsSL https://get.pulumi.com | sh && pip install --upgrade pip && pip install pyinfra",
+  "postCreateCommand": "sudo apt update && sudo apt install -y azure-cli && curl -fsSL https://get.pulumi.com | sh && pip install --upgrade pip && pip install pyinfra",
   "customizations": {
     "vscode": {
       "settings": {
@@ -17,7 +21,8 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "ms-vscode.azurecli",
-        "ms-azuretools.vscode-azureresourcegroups"
+        "ms-azuretools.vscode-azureresourcegroups",
+        "ritwickdey.LiveServer"
       ]
     }
   }
