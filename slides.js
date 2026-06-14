@@ -176,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, false);
   
   function handleSwipe() {
+    // Touch swipe threshold (in pixels) — extracted from CSS --swipe-threshold variable
     const swipeThreshold = 50;
     if (touchEndX < touchStartX - swipeThreshold) {
       nextSlide(); // Swiped left -> show next

@@ -924,15 +924,28 @@ security:
       }
     });
 
-    // Sidebar toggle functionality
+    /* ========================================
+       SIDEBAR STATE MANAGEMENT
+       Handles sidebar visibility toggle, localStorage persistence,
+       and keyboard shortcuts for showing/hiding the navigation panel.
+       ======================================== */
+
+    // DOM references
     const sidebar = document.querySelector('aside.sidebar');
     const sidebarToggleFallback = document.getElementById('sidebarToggleFallback');
     const fallbackIconOpen = sidebarToggleFallback.querySelector('.icon-open');
     const fallbackIconClose = sidebarToggleFallback.querySelector('.icon-close');
+    
+    // localStorage key for persisting sidebar state across sessions
     const SIDEBAR_STATE_KEY = 'pyconsg26_sidebar_hidden';
 
+    /**
+     * Updates sidebar visibility state and saves to localStorage.
+     * @param {boolean} hidden - True to hide sidebar, false to show it
+     */
     function setSidebarState(hidden) {
       if (hidden) {
+        // Hide sidebar: add CSS class, switch icon, update labels
         sidebar.classList.add('hidden');
         sidebarToggleFallback.classList.add('active');
         fallbackIconOpen.style.display = 'none';
@@ -940,6 +953,7 @@ security:
         sidebarToggleFallback.title = 'Show Sidebar';
         sidebarToggleFallback.setAttribute('aria-label', 'Show Sidebar');
       } else {
+        // Show sidebar: remove CSS class, switch icon, update labels
         sidebar.classList.remove('hidden');
         sidebarToggleFallback.classList.remove('active');
         fallbackIconOpen.style.display = 'block';
@@ -947,19 +961,25 @@ security:
         sidebarToggleFallback.title = 'Hide Sidebar';
         sidebarToggleFallback.setAttribute('aria-label', 'Hide Sidebar');
       }
+      
+      // Restore focus to toggle button for accessibility
+      sidebarToggleFallback.focus();
+      
+      // Persist state to localStorage for next page load
       localStorage.setItem(SIDEBAR_STATE_KEY, hidden);
     }
 
-    // Initialize sidebar state from localStorage
+    // Load and apply saved sidebar state from localStorage on page init
     const isSidebarHidden = localStorage.getItem(SIDEBAR_STATE_KEY) === 'true';
     setSidebarState(isSidebarHidden);
 
-    // Single sidebar toggle button (always visible)
+    // Click handler: toggle sidebar when button is clicked
     sidebarToggleFallback.addEventListener('click', function() {
       setSidebarState(!sidebar.classList.contains('hidden'));
     });
 
-    // Keyboard shortcut: Press 'S' to toggle sidebar
+    // Keyboard shortcut handler: Press 'S' to toggle sidebar visibility
+    // Safeguards: don't toggle if user is typing in an input/textarea or has architecture modal open
     document.addEventListener('keydown', function(event) {
       if (event.key.toLowerCase() === 's' && 
           document.activeElement.tagName !== 'INPUT' && 
@@ -968,6 +988,34 @@ security:
         sidebarToggleFallback.click();
       }
     });
+
+    /* ========================================
+       TECHNICAL DEBT & FUTURE OPTIMIZATIONS
+       ======================================== 
+       
+       1. SYNTAX HIGHLIGHTING LIBRARY REPLACEMENT
+          Current: Manual regex-based highlighting in slides.js
+          Limitation: Fragile edge case handling (nested quotes, escape sequences)
+          Candidate: Prism.js or Highlight.js for robust language support
+          Priority: LOW (works well for current code examples)
+       
+       2. SVG ICON CONSOLIDATION
+          Current: Separate SVG elements for toggle open/close states
+          Optimization: Use CSS transforms or mask filters for single SVG
+          Impact: Reduce HTML payload, simplify icon switching logic
+          Priority: LOW (current approach is maintainable)
+       
+       3. MOBILE NAVIGATION ACCESSIBILITY
+          Current: Sidebar hidden on mobile (<768px) with no alternative UI
+          Issue: No fallback navigation method on small screens
+          Solution: Add modal menu or bottom sheet navigation for mobile
+          Priority: MEDIUM (affects mobile user experience)
+       
+       4. FOCUS MANAGEMENT ENHANCEMENTS
+          Current: Focus restored to toggle button after state change
+          Enhancement: Consider focus trap within sidebar when opened (for accessibility)
+          Priority: LOW (basic focus management implemented)
+    */
   </script>
 </body>
 

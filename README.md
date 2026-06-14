@@ -6,7 +6,7 @@
 
 📅 **Date:** 20 June 2026  
 📍 **Venue:** Lifelong Learning Institute, Singapore  
-🎤 **Speaker:** Piti Champeethong — Senior Consulting Engineer at MongoDB | Microsoft MVP
+🎤 **Speaker:** Piti Champeethong — MongoDB Senior Consulting Engineer | Microsoft MVP
 
 ---
 
@@ -45,6 +45,19 @@ Open `index.html` in your browser, or use the keyboard shortcuts:
 - **← / →** — Navigate slides
 - **Space** — Next slide
 - **Home / End** — Jump to first/last slide
+
+### 🎮 Advanced Controls
+
+**Sidebar Navigation:**
+- **Click** the hamburger toggle button (bottom-left corner) to hide/show the sidebar
+- **Press 'S'** to toggle sidebar visibility with a keyboard shortcut
+- **Sidebar state persists** across page reloads via browser localStorage
+
+**Additional Shortcuts:**
+- **Escape** — Close the expanded architecture diagram (when clicked)
+
+**Code Blocks:**
+The presentation includes syntax-highlighted code for Python, YAML, Bash, and Jinja2 templates with automatic language detection.
 
 ### 🔧 Run the Demo
 
